@@ -65,7 +65,7 @@
                 @empty <tr><td colspan="5" class="empty">Belum ada barang.</td></tr> @endforelse
                 </tbody>
             </table></div>
-            <div class="actions"><button class="button" type="submit">Simpan Transaksi</button><span class="total">Total: <span id="total">Rp 0</span></span></div>
+            <div class="actions"><button class="button" type="submit">Simpan Transaksi</button><span class="total">Total Belanja: <span id="total">Rp 0</span></span></div>
         </form>
     </section>
 
@@ -102,8 +102,28 @@
 </main>
 <script>
     const formatRupiah = value => 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
-    const updateTotal = () => { let total = 0; document.querySelectorAll('#transaction-form tbody tr[data-price]').forEach(row => { const qty = Number(row.querySelector('.qty').value) || 0; const subtotal = qty * Number(row.dataset.price); total += subtotal; row.querySelector('.subtotal').textContent = formatRupiah(subtotal); }); document.getElementById('total').textContent = formatRupiah(total); };
-    document.querySelectorAll('.qty').forEach(input => input.addEventListener('input', updateTotal));
+
+    function updateTotalBelanja() {
+        let total = 0;
+
+        document.querySelectorAll('#transaction-form tbody tr[data-price]').forEach(row => {
+            const qtyInput = row.querySelector('.qty');
+            const qty = Math.max(0, Number(qtyInput.value) || 0);
+            const subtotal = qty * Number(row.dataset.price);
+
+            total += subtotal;
+            row.querySelector('.subtotal').textContent = formatRupiah(subtotal);
+        });
+
+        document.getElementById('total').textContent = formatRupiah(total);
+    }
+
+    document.querySelectorAll('#transaction-form .qty').forEach(input => {
+        input.addEventListener('input', updateTotalBelanja);
+        input.addEventListener('change', updateTotalBelanja);
+    });
+
+    updateTotalBelanja();
 </script>
 </body>
 </html>
