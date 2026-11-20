@@ -14,7 +14,7 @@ class TokoController extends Controller
 {
     public function index(): View
     {
-        return view('toko.index', [
+        return view('kelontong.index', [
             'barangs' => Barang::orderBy('nama_barang')->get(),
             'utangs' => Utang::where('status', 'belum_lunas')->latest()->get(),
         ]);
